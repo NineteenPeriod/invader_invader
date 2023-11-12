@@ -15,35 +15,41 @@ class InputProvider with ChangeNotifier, DiagnosticableTreeMixin {
   var keysPressed = <PhysicalKeyboardKey>{};
 
   addKeyPressed(PhysicalKeyboardKey physicalKeyboardKey) {
-    keysPressed.add(physicalKeyboardKey);
+    if (!keysPressed.contains(physicalKeyboardKey)) {
+      print(
+          "++++++++++++++++++++ ADD KEY PRESSED ++++++++++++++++++++++++++++");
+      keysPressed.add(physicalKeyboardKey);
+    }
     // notifyListeners();
   }
 
   removeKeyPressed(PhysicalKeyboardKey physicalKeyboardKey) {
+    print("++++++++++++++++++++ REMOVE KEY  ++++++++++++++++++++++++++++");
     keysPressed.remove(physicalKeyboardKey);
     // notifyListeners();
   }
 
   updatePosition() {
+    // TODO: MODIFY TO OPTIMIZE SEARCH
     if (keysPressed.contains(PhysicalKeyboardKey.keyW)) {
-      print("pressed w");
       movePlayerUp();
     }
     if (keysPressed.contains(PhysicalKeyboardKey.keyA)) {
-      print("pressed a");
       movePlayerLeft();
     }
     if (keysPressed.contains(PhysicalKeyboardKey.keyS)) {
-      print("pressed s");
       movePlayerDown();
     }
     if (keysPressed.contains(PhysicalKeyboardKey.keyD)) {
-      print("pressed d");
       movePlayerRight();
     }
-    print('NEW Position(x: $_playerX, y: $_playerY)');
+    print(' ----- NEW Position(x: $_playerX, y: $_playerY) ----- ');
     notifyListeners();
   }
+
+  // void updatePlayerPosition() {
+  //   notifyListeners();
+  // }
 
   Position getPosition() {
     return Position(x: _playerX, y: _playerY);

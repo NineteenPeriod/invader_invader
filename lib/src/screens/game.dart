@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
@@ -49,29 +50,11 @@ class _GameState extends State<Game> {
 
   void _initGameLoop() {
     isRunning = true;
-  }
 
-  void movePlayerLeft() {
-    setState(() {
-      _playerX -= (movementSteps * movementSpeed);
-    });
-  }
-
-  void movePlayerRight() {
-    setState(() {
-      _playerX += (movementSteps * movementSpeed);
-    });
-  }
-
-  void movePlayerUp() {
-    setState(() {
-      _playerY -= (movementSteps * (movementSpeed * verticalSpeedIncrease));
-    });
-  }
-
-  void movePlayerDown() {
-    setState(() {
-      _playerY += (movementSteps * (movementSpeed * verticalSpeedIncrease));
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      //
+      print(" ----- UPDATING POSITION ...  ----- ");
+      context.read<InputProvider>().updatePosition();
     });
   }
 
@@ -89,42 +72,11 @@ class _GameState extends State<Game> {
       context.read<InputProvider>().removeKeyPressed(event.physicalKey);
     }
 
+    print("  ----- KEYS PRESSED  ----- ");
     print(context.read<InputProvider>().keysPressed);
-    print("updateing position");
-    context.read<InputProvider>().updatePosition();
+    // context.read<InputProvider>().updatePosition();
 
     return KeyEventResult.handled;
-
-    // if (event is RawKeyDownEvent) {
-    //   if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-    //     print('A DOWN');
-    //     keysPressed.add('A');
-    //   }
-    // } else if (event is RawKeyUpEvent) {
-    //   if (event.physicalKey == PhysicalKeyboardKey.keyA) {
-    //     print('up');
-    //     keysPressed.remove('A');
-    //   }
-    // }
-
-    // switch (event.isKeyPressed(key)) {
-    //   case LogicalKeyboardKey.keyA:
-
-    //     movePlayerLeft();
-    //     return KeyEventResult.handled;
-    //   case LogicalKeyboardKey.keyD:
-    //     print("d");
-    //     movePlayerRight();
-    //     return KeyEventResult.handled;
-    //   case LogicalKeyboardKey.keyW:
-    //     movePlayerUp();
-    //     return KeyEventResult.handled;
-    //   case LogicalKeyboardKey.keyS:
-    //     movePlayerDown();
-    //     return KeyEventResult.handled;
-    //   default:
-    //     return KeyEventResult.ignored;
-    // }
   }
 
   @override
@@ -176,7 +128,7 @@ class _GameState extends State<Game> {
 
   _renderPlayer(BuildContext context) {
     Position position = context.watch<InputProvider>().getPosition();
-    print("new position");
+    print(" ----- RENDERING PLAYER AT ----- ");
     print(position);
     return Player(
       x: position.x,
