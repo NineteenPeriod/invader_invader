@@ -16,64 +16,55 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  final bool enablePrint = false;
+
   final bgColor = Colors.black;
 
   bool isRunning = false;
 
-  double _playerX = 0;
-  double _playerY = 0;
-  double movementSteps = 0.001;
-  double movementSpeed = 30;
-  double verticalSpeedIncrease = 2;
-
-  int maxCycles = 10;
-
-  ValueNotifier<bool> _isKeyAPressed = ValueNotifier<bool>(false);
-
-  var keysPressed = <PhysicalKeyboardKey>{};
-  final allowedKeys = <PhysicalKeyboardKey>{
-    PhysicalKeyboardKey.keyW,
-    PhysicalKeyboardKey.keyA,
-    PhysicalKeyboardKey.keyS,
-    PhysicalKeyboardKey.keyD
+  final allowedKeys = <LogicalKeyboardKey>{
+    LogicalKeyboardKey.keyW,
+    LogicalKeyboardKey.keyA,
+    LogicalKeyboardKey.keyS,
+    LogicalKeyboardKey.keyD
   };
 
   @override
   void initState() {
     // TODO: implement initState
-    _setListeners();
     _initGameLoop();
     super.initState();
   }
 
-  void _setListeners() {}
+  void dynamicPrint(Object? object) {
+    if (enablePrint) {
+      print(object);
+    }
+  }
 
   void _initGameLoop() {
     isRunning = true;
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(milliseconds: 1), (timer) {
       //
-      print(" ----- UPDATING POSITION ...  ----- ");
+      dynamicPrint(" ----- UPDATING POSITION ...  ----- ");
       context.read<InputProvider>().updatePosition();
     });
   }
 
   _handleInput(FocusNode node, RawKeyEvent event) {
-    if (!allowedKeys.contains(event.physicalKey)) {
+    if (!allowedKeys.contains(event.logicalKey)) {
       return KeyEventResult.ignored;
     }
 
     if (event is RawKeyDownEvent) {
-      if (keysPressed.length == 2) {
-        return KeyEventResult.ignored;
-      }
-      context.read<InputProvider>().addKeyPressed(event.physicalKey);
+      context.read<InputProvider>().addKeyPressed(event);
     } else if (event is RawKeyUpEvent) {
-      context.read<InputProvider>().removeKeyPressed(event.physicalKey);
+      context.read<InputProvider>().removeKeyPressed(event);
     }
 
-    print("  ----- KEYS PRESSED  ----- ");
-    print(context.read<InputProvider>().keysPressed);
+    dynamicPrint("  ----- KEYS PRESSED  ----- ");
+    dynamicPrint(context.read<InputProvider>().keysPressed);
     // context.read<InputProvider>().updatePosition();
 
     return KeyEventResult.handled;
@@ -128,8 +119,8 @@ class _GameState extends State<Game> {
 
   _renderPlayer(BuildContext context) {
     Position position = context.watch<InputProvider>().getPosition();
-    print(" ----- RENDERING PLAYER AT ----- ");
-    print(position);
+    dynamicPrint(" ----- RENDERING PLAYER AT ----- ");
+    dynamicPrint(position);
     return Player(
       x: position.x,
       y: position.y,

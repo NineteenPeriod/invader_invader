@@ -4,46 +4,58 @@ import 'package:flutter/services.dart';
 import 'package:invader_invader/src/models/position.dart';
 
 class InputProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  bool enablePrint = false;
+
   double _playerX = 0;
   double _playerY = 0;
 
   double movementSteps = 0.001;
-  double movementSpeed = 30;
+  double movementSpeed = 1;
 
   double verticalSpeedIncrease = 2;
 
-  var keysPressed = <PhysicalKeyboardKey>{};
+  var keysPressed = <int, LogicalKeyboardKey>{};
 
-  addKeyPressed(PhysicalKeyboardKey physicalKeyboardKey) {
-    if (!keysPressed.contains(physicalKeyboardKey)) {
-      print(
+  addKeyPressed(RawKeyEvent rawKeyEvent) {
+    int keyId = rawKeyEvent.logicalKey.keyId;
+
+    // if (keysPressed.length == 2) {
+    //   return;
+    // }
+
+    if (keysPressed[keyId] == null) {
+      dynamicPrint(
           "++++++++++++++++++++ ADD KEY PRESSED ++++++++++++++++++++++++++++");
-      keysPressed.add(physicalKeyboardKey);
+      keysPressed[keyId] = rawKeyEvent.logicalKey;
     }
     // notifyListeners();
   }
 
-  removeKeyPressed(PhysicalKeyboardKey physicalKeyboardKey) {
-    print("++++++++++++++++++++ REMOVE KEY  ++++++++++++++++++++++++++++");
-    keysPressed.remove(physicalKeyboardKey);
+  removeKeyPressed(RawKeyEvent rawKeyEvent) {
+    int keyId = rawKeyEvent.logicalKey.keyId;
+    dynamicPrint(
+        "++++++++++++++++++++ REMOVE KEY  ++++++++++++++++++++++++++++");
+    keysPressed.remove(keyId);
     // notifyListeners();
   }
 
   updatePosition() {
     // TODO: MODIFY TO OPTIMIZE SEARCH
-    if (keysPressed.contains(PhysicalKeyboardKey.keyW)) {
+    dynamicPrint(DateTime.now());
+    if (keysPressed[LogicalKeyboardKey.keyW.keyId] != null) {
       movePlayerUp();
     }
-    if (keysPressed.contains(PhysicalKeyboardKey.keyA)) {
+    if (keysPressed[LogicalKeyboardKey.keyA.keyId] != null) {
       movePlayerLeft();
     }
-    if (keysPressed.contains(PhysicalKeyboardKey.keyS)) {
+    if (keysPressed[LogicalKeyboardKey.keyS.keyId] != null) {
       movePlayerDown();
     }
-    if (keysPressed.contains(PhysicalKeyboardKey.keyD)) {
+    if (keysPressed[LogicalKeyboardKey.keyD.keyId] != null) {
       movePlayerRight();
     }
-    print(' ----- NEW Position(x: $_playerX, y: $_playerY) ----- ');
+    dynamicPrint(DateTime.now());
+    dynamicPrint(' ----- NEW Position(x: $_playerX, y: $_playerY) ----- ');
     notifyListeners();
   }
 
@@ -76,6 +88,12 @@ class InputProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void movePlayerDown() {
     if (_playerY < 1.0) {
       _playerY += (movementSteps * (movementSpeed));
+    }
+  }
+
+  void dynamicPrint(Object? object) {
+    if (enablePrint) {
+      print(object);
     }
   }
 }
