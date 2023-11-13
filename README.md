@@ -1,16 +1,14 @@
 # invader_invader
 
-A new Flutter project.
+A very early proof of concept of a 2D space shooter made in Flutter.
 
-## Getting Started
+### Funciones pendientes
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [ ] Sistema de colisiones Quadtree
+- [ ] Spawn de enemigos
+- [ ] Spawn de proyectiles
+- [ ] Sistema de Vidas y Puntuacion
+- [ ] Evolucion del juego
+- [ ] Dificultades
+- [ ] Mejoras del jugador
+- [ ] 
