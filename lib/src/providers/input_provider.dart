@@ -40,8 +40,8 @@ class InputProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   updatePosition() {
-    // TODO: MODIFY TO OPTIMIZE SEARCH
-    dynamicPrint(DateTime.now());
+    var oldPosition = getPosition();
+
     if (keysPressed[LogicalKeyboardKey.keyW.keyId] != null) {
       movePlayerUp();
     }
@@ -54,9 +54,13 @@ class InputProvider with ChangeNotifier, DiagnosticableTreeMixin {
     if (keysPressed[LogicalKeyboardKey.keyD.keyId] != null) {
       movePlayerRight();
     }
-    dynamicPrint(DateTime.now());
-    dynamicPrint(' ----- NEW Position(x: $_playerX, y: $_playerY) ----- ');
-    notifyListeners();
+
+    var newPosition = getPosition();
+
+    if (oldPosition != newPosition) {
+      dynamicPrint(' ----- NEW Position(x: $_playerX, y: $_playerY) ----- ');
+      notifyListeners();
+    }
   }
 
   // void updatePlayerPosition() {
