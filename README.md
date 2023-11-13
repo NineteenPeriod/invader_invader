@@ -11,4 +11,3 @@ A very early proof of concept of a 2D space shooter made in Flutter.
 - [ ] Evolucion del juego
 - [ ] Dificultades
 - [ ] Mejoras del jugador
-- [ ] 
